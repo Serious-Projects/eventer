@@ -1,0 +1,43 @@
+generator client {
+  provider			= "prisma-client-js"
+  previewFeatures = ["filteredRelationCount"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String       @id @default(uuid())
+  name        String
+  email       String       @unique
+  salt        String
+  password    String
+  joinedAt    DateTime     @default(now())
+  modifiedAt  DateTime     @updatedAt
+  events      Event[]
+  submissions Submission[]
+}
+
+model Event {
+  id           String      	@id @default(uuid())
+  title			String			@unique
+  description  String
+  beginAt      DateTime
+  endAt        DateTime
+  deadline     DateTime
+  participants User[]
+  submissions  Submission[]
+  createdAt    DateTime			@default(now())
+}
+
+model Submission {
+  id          String   @id @default(uuid())
+  userId      String
+  participant User     @relation(fields: [userId], references: [id])
+  eventId     String
+  event       Event    @relation(fields: [eventId], references: [id])
+  submittedAt DateTime @default(now())
+  modifiedAt  DateTime @updatedAt
+}

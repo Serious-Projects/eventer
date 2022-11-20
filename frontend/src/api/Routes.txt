@@ -1,0 +1,122 @@
+base_url = "http://localhost:3000"
+
+├── Events Routes
+│   ├── {base_url}/events/public — (GET)
+│   ├── {base_url}/events/my — (GET)
+│   ├── {base_url}/events/my/event_id — (GET)
+│   ├── {base_url}/events/create — (POST)
+│   ├── {base_url}/events/enroll/event_id — (GET)
+│   ├── {base_url}/events/withdraw/event_id — (GET)
+
+├── Users Routes
+│   ├── {base_url}/users — (GET)
+│   ├── {base_url}/users/me — (GET)
+│   ├── {base_url}/users/create — (POST)
+│   ├── {base_url}/users/me/update — (PATCH)
+│   ├── {base_url}/users/me/remove — (DELETE)
+
+├── Authentication Routes
+│   ├── {base_url}/v1/auth/login — (POST)
+
+[====================[EVENT ROUTES]====================]
+[METHOD:GET]
+   — {base_url}/events/public
+[DESCRIPTION]
+   — Gets all the created events.
+[RESPONSE]
+   — id: string
+   — title: string
+   — description: string
+   — beginAt: date
+   — endAt: date
+   — deadline: date
+
+/******************************************************/
+
+[METHOD:GET]
+   — {base_url}/events/my
+[HEADERS]
+   — authorization: Bearer %token%
+[DESCRIPTION]
+   — Gets all the user subscribed events.
+[RESPONSE]
+   — id: string
+   — title: string
+   — description: string
+   — beginAt: date
+   — endAt: date
+   — deadline: date
+
+/******************************************************/
+
+[METHOD:GET]
+   — {base_url}/events/my/event_id
+[HEADERS]
+   — authorization: Bearer %token%
+[DESCRIPTION]
+   — Gets the event by Id from the subscribed events.
+[RESPONSE]
+   — id: string
+   — title: string
+   — description: string
+   — beginAt: date
+   — endAt: date
+   — deadline: date
+   — participants
+      — id: string
+      — name: string
+      — email: string
+
+/******************************************************/
+
+[METHOD:POST]
+   — {base_url}/events/create
+[HEADERS]
+   — authorization: Bearer %token%
+[DESCRIPTION]
+   — Creates a new event.
+[BODY]
+   — title: string
+   — description: string
+   — beginAt: date
+   — endAt: date
+   — deadline: date
+[RESPONSE]
+   — id: string
+   — title: string
+   — description: string
+   — beginAt: date
+   — endAt: date
+   — deadline: date
+
+/******************************************************/
+
+[METHOD:GET]
+   — {base_url}/events/enroll/event_id
+[HEADERS]
+   — authorization: Bearer %token%
+[DESCRIPTION]
+   — Enrolls to a certain event.
+[RESPONSE]
+   — id: string
+   — title: string
+   — description: string
+   — beginAt: date
+   — endAt: date
+   — deadline: date
+
+/******************************************************/
+
+[METHOD:GET]
+   — {base_url}/events/withdraw/event_id
+[HEADERS]
+   — authorization: Bearer %token%
+[DESCRIPTION]
+   — Removes enrollment from a certain event.
+[RESPONSE]
+   — id: string
+   — title: string
+   — description: string
+   — beginAt: date
+   — endAt: date
+   — deadline: date
