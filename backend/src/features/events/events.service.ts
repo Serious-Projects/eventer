@@ -64,7 +64,9 @@ export class EventsService extends BaseService {
       if (!(await this.userExists(userId))) throw UserNotFoundException;
       if (!(await this.eventExists(eventId))) throw EventNotFoundException;
       if (!(await this.isUserEnrolledInEvent(userId, eventId))) {
-         throw new RelationDoesNotExistsException("You are not enrolled to this event");
+         throw new RelationDoesNotExistsException(
+            "You are not enrolled to this event"
+         );
       }
       return this.prisma.event.update({
          where: { id: eventId },
