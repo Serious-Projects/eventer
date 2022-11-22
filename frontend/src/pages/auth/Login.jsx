@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useState, useEffect } from 'react';
 import { Link, useOutletContext, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -18,18 +18,21 @@ function LoginPage() {
    });
 
    useLayoutEffect(() => {
-      if (!!token) return navigate(-1);
       setLayoutData((prev) => ({ title: 'Login', icon: 'right-to-bracket' }));
+   }, []);
+   
+   useEffect(() => {
+      if (!!token) return navigate('/');
    }, []);
 
    const submitFormData = async (formData) => {
       try {
          const { data } = await login(formData);
-         saveUser(data.token);
+         saveUser(data.access_token);
          setError(null);
          navigate(-1);
       } catch (err) {
-         if (err.response.data.status === 404) {
+         if (err.response.data.statusCode === 404) {
             setError(err.response.data.message);
          }
       }

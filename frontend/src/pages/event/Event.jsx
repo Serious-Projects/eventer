@@ -48,8 +48,8 @@ function EventPage() {
                Participants who joined <i className="fa-regular fa-arrow-right ml-2"></i>
             </h1>
             <div className="grid grid-cols-2 justify-items-center mt-4 gap-3 md:grid-cols-4 md:gap-4 md:mt-6">
-               {!!participants.length &&
-                  participants.map((user, idx) => (
+               {!!event?.participants.length &&
+                  event.participants.map((user, idx) => (
                      <UserCard
                         key={user.id}
                         id={user.id}

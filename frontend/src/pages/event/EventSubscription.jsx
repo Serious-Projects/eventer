@@ -15,6 +15,7 @@ function EventSubscriptionPage() {
       } catch (err) {
          if (err.response.data.statusCode === 400) {
             alert(err.response.data.message);
+            return navigate(-1);
          }
       }
    };

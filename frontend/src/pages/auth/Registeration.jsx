@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState, useEffect } from 'react';
 import { Link, useOutletContext, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '../../components';
 import { signupSchema } from '../../validation';
-import { instance } from '../../api/fetcher';
+import { signup } from '../../api/fetcher';
+import useAuthStore from '../../context/AuthContext';
 
 function SignupPage() {
    const setLayoutData = useOutletContext();
    const [error, setError] = useState(null);
    const navigate = useNavigate();
+   const { token, saveUser } = useAuthStore((state) => ({ token: state.token, saveUser: state.saveUser }));
 
    const { register, handleSubmit, formState: { errors } } = useForm({
       resolver: zodResolver(signupSchema),
@@ -20,16 +22,21 @@ function SignupPage() {
       try {
          const { data } = await signup(data_);
          setError(null);
-         navigate('/auth/login');
+         saveUser(data.access_token);
+         return navigate('/');
       } catch (err) {
-         if (err.response.data.status === 409) {
+         if (err.response.data.statusCode === 409) {
             setError(err.response.data.message);
          }
       }
    };
 
-   useEffect(() => {
+   useLayoutEffect(() => {
       setLayoutData((prev) => ({ title: 'Signup', icon: 'user-plus' }));
+   }, []);
+   
+   useEffect(() => {
+      if (!!token) return navigate('/');
    }, []);
 
    return (

@@ -13,8 +13,11 @@ import {
    Redirect,
    UseFilters,
    UseGuards,
+   UploadedFile,
+   UseInterceptors,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
+import { FileInterceptor } from '@nestjs/platform-express';
 import { UserService } from "./user.service";
 import { AuthService } from "../auth/auth.service";
 import { CreateUserDto, UserDto } from "./user.dtos";
@@ -36,21 +39,34 @@ export class UserController {
       return this.userService.getAll();
    }
 
+   @Get("public/:id")
+   @UseGuards(AuthGuard("jwt"))
+   @HttpCode(200)
+   async getPublicUser(@Param('id') id: string) {
+      return await this.userService.getById(id);
+   }
+   
    @Get("me")
    @UseGuards(AuthGuard("jwt"))
    @HttpCode(200)
    async getUser(@User() user: ReqUser) {
-      return user;
+      return {
+         id: user.sub,
+         name: user.name,
+         email: user.email,
+      };
    }
 
    @Post("create")
+   @UseInterceptors(FileInterceptor('file'))
    @HttpCode(201)
-   async createUser(@Body() createUserDto: CreateUserDto) {
-      const user = await this.userService.create(createUserDto);
+   async createUser(@UploadedFile() profileImg: Express.Multer.File, @Body() createUserDto: CreateUserDto) {
+      const user = await this.userService.create(createUserDto, profileImg);
       if (!user) {
          throw new HttpException("Oops! something went wrong here...", 500);
       }
-      return user;
+      const token = await this.authService.createAccessToken(user);
+      return { access_token: token };
    }
 
    @UseGuards(AuthGuard("jwt"))

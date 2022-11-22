@@ -61,9 +61,15 @@ export class EventsController {
    @HttpCode(200)
    async withdrawParticipation(@Param("eventId") eventId: string, @User() user: ReqUser) {
       const currentUserId = user.sub;
-      return await this.eventsService.withdrawParticipation(
-         eventId,
-         currentUserId
-      );
+      return await this.eventsService.withdrawParticipation(eventId, currentUserId);
+   }
+   
+   @UseGuards(AuthGuard("jwt"))
+   @Get("check-participation/:eventId")
+   @HttpCode(200)
+   async checkParticipation(@Param("eventId") eventId: string, @User() user: ReqUser) {
+      const userId = user.sub;
+      const isParticipant = await this.eventsService.isParticipant(userId, eventId);
+      return { isParticipant };
    }
 }

@@ -34,3 +34,8 @@ export function withdrawEventEnrollment(eventId) {
    instance.defaults.headers.common['authorization'] = `Bearer ${token}`;
    return instance.get(`/events/withdraw/${eventId}`);
 }
+
+export function fetchUser(token, userId) {
+   instance.defaults.headers.common['authorization'] = `Bearer ${token}`;
+   return (url) => instance.get(url).then(res => res.data);
+}

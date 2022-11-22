@@ -1,21 +1,29 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { participants } from '../../data';
+import { useFetchUser } from '../../api/hooks';
+import useAuthStore from '../../context/AuthContext';
+import defaultProfileImage from '../../images/defaultProfile.png';
 
 function UserProfilePage() {
    const { id } = useParams();
-   const [user, setUser] = useState({});
-
-   useEffect(() => {
-      setUser(() => participants.find((p) => p.id === id));
-   }, []);
-
+   const authToken = useAuthStore(state => state.token);
+   const { user, isLoading, isError } = useFetchUser(authToken, id);
+   
+   if (isLoading) {
+      return <h3>Loading...</h3>;
+   }
+   
+   if (isError) {
+      console.log(isError);
+      return <h3>{isError.response.data.message}</h3>;
+   }
+   
    return (
       <section className="font-poppins mx-auto md:my-8 md:p-8 md:w-[90vw]">
          <div className="h-[70vh] mt-14 px-3 py-5 md:h-[50vh] md:mt-48 md:bg-white md:shadow-md md:rounded-[0.425rem] md:shadow-slate-200">
             <div className="w-48 h-48 mx-auto -mt-16 bg-teal-400 rounded-full shadow-md shadow-slate-200 md:w-72 md:h-72 md:-mt-28">
                <img
-                  src={user?.imageUrl}
+                  src={user?.imageUrl ?? defaultProfileImage}
                   className="w-full h-full rounded-full object-cover"
                />
             </div>

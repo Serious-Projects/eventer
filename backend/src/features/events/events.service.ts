@@ -44,9 +44,7 @@ export class EventsService extends BaseService {
    }
 
    async enrollIn(eventId: string, userId: string) {
-      if (!(await this.userExists(userId))) throw UserNotFoundException;
-      if (!(await this.eventExists(eventId))) throw EventNotFoundException;
-      if (await this.isUserEnrolledInEvent(userId, eventId)) {
+      if (await this.isParticipant(userId, eventId)) {
          throw new RelationExistsException("Already registerd for this event");
       }
       return this.prisma.event.update({
@@ -61,12 +59,8 @@ export class EventsService extends BaseService {
    }
 
    async withdrawParticipation(eventId: string, userId: string) {
-      if (!(await this.userExists(userId))) throw UserNotFoundException;
-      if (!(await this.eventExists(eventId))) throw EventNotFoundException;
-      if (!(await this.isUserEnrolledInEvent(userId, eventId))) {
-         throw new RelationDoesNotExistsException(
-            "You are not enrolled to this event"
-         );
+      if (!(await this.isParticipant(userId, eventId))) {
+         throw new RelationDoesNotExistsException("You are not enrolled to this event");
       }
       return this.prisma.event.update({
          where: { id: eventId },
@@ -77,5 +71,11 @@ export class EventsService extends BaseService {
          },
          select: { id: true },
       });
+   }
+   
+   async isParticipant(userId, eventId) {
+      if (!(await this.userExists(userId))) throw UserNotFoundException;
+      if (!(await this.eventExists(eventId))) throw EventNotFoundException;
+      return this.isUserEnrolledInEvent(userId, eventId);
    }
 }
