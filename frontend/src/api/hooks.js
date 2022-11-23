@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { event, fetchUser } from './fetcher';
+import { event, fetchUser, isParticipant } from './fetcher';
 
 export const useEvents = (token) => {
    const { data, error } = useSWR('/events/public', event(token));

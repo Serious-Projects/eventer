@@ -70,6 +70,6 @@ export class EventsController {
    async checkParticipation(@Param("eventId") eventId: string, @User() user: ReqUser) {
       const userId = user.sub;
       const isParticipant = await this.eventsService.isParticipant(userId, eventId);
-      return { isParticipant };
+      return { isEnrolled: isParticipant };
    }
 }

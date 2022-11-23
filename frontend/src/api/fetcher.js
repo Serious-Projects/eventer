@@ -39,3 +39,8 @@ export function fetchUser(token, userId) {
    instance.defaults.headers.common['authorization'] = `Bearer ${token}`;
    return (url) => instance.get(url).then(res => res.data);
 }
+
+export function isParticipant(token, eventId) {
+   instance.defaults.headers.common['authorization'] = `Bearer ${token}`;
+   return instance.get(`/events/check-participation/${eventId}`).then(res => res.data);
+}
