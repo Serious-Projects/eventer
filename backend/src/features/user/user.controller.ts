@@ -58,15 +58,21 @@ export class UserController {
    }
 
    @Post("create")
-   @UseInterceptors(FileInterceptor('file'))
    @HttpCode(201)
-   async createUser(@UploadedFile() profileImg: Express.Multer.File, @Body() createUserDto: CreateUserDto) {
-      const user = await this.userService.create(createUserDto, profileImg);
+   async createUser(@Body() createUserDto: CreateUserDto) {
+      const user = await this.userService.create(createUserDto);
       if (!user) {
          throw new HttpException("Oops! something went wrong here...", 500);
       }
       const token = await this.authService.createAccessToken(user);
       return { access_token: token };
+   }
+   
+   @Post('create/upload')
+   @UseInterceptors(FileInterceptor('profile'))
+   @HttpCode(201)
+   async uploadProfile(@UploadedFile() profileImg: Express.Multer.File) {
+      return await this.userService.uploadImageToCloudinary(profileImg);
    }
 
    @UseGuards(AuthGuard("jwt"))

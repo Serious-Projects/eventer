@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from "@nestjs/common";
+import { Injectable, BadRequestException, InternalServerErrorException } from "@nestjs/common";
 import { CreateUserDto } from "./user.dtos";
 import { Hashing } from "../../utils";
 import { BaseService } from "../../common/baseService";
@@ -7,7 +7,9 @@ import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Injectable()
 export class UserService extends BaseService {
-   constructor(private cloudinary: CloudinaryService) {}
+   constructor(private cloudinary: CloudinaryService) {
+      super();
+   }
    
    getAll() {
       return this.prisma.user.findMany({
@@ -33,11 +35,9 @@ export class UserService extends BaseService {
       });
    }
 
-   async create(userDto: CreateUserDto, profileImg: Express.Multer.File) {
+   create(userDto: CreateUserDto) {
       const { password, ...rest } = userDto;
       const { salt, hashed } = Hashing.hashPassword(password);
-      
-      await this.uploadImageToCloudinary(profileImg);
       
       return this.prisma.user.create({
          data: {
@@ -71,8 +71,8 @@ export class UserService extends BaseService {
    }
    
    async uploadImageToCloudinary(file: Express.Multer.File) {
-      return await this.cloudinary.uploadImage(file).catch(() => {
-         throw new BadRequestException('Invalid file type.');
+      return await this.cloudinary.uploadImage(file).catch((err) => {
+         throw new BadRequestException(err.message);
       });
    }
 }
