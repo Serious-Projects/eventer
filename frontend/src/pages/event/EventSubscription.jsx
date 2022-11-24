@@ -1,17 +1,20 @@
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { enrollEvent } from '../../api/fetcher';
 import useAuthStore from '../../context/AuthContext';
+import { ConfirmBox } from '../../components';
 
 function EventSubscriptionPage() {
    const { id } = useParams();
    const navigate = useNavigate();
    const authToken = useAuthStore(state => state.token);
+   const [confirmed, setConfirmed] = useState(false);
 
    const subscribeEvent = async (event) => {
       // Event subscription logic here...
       try {
          const { data: event } = await enrollEvent(authToken, id);
-         if (event.id === id) return navigate('/');
+         if (event.id === id) setConfirmed(true);
       } catch (err) {
          if (err.response.data.statusCode === 400) {
             alert(err.response.data.message);
@@ -19,6 +22,8 @@ function EventSubscriptionPage() {
          }
       }
    };
+   
+   if (confirmed) return <ConfirmBox />;
 
    return (
       <div className="w-full">

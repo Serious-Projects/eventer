@@ -5,6 +5,16 @@ import { useEvent } from "../../api/hooks";
 import { isParticipant } from "../../api/fetcher";
 import useAuthStore from "../../context/AuthContext";
 import { EventNotFound } from "../../components";
+// import { events, participants } from "../../data";
+
+function ParticipatedMessage() {
+   return (
+      <p className="mt-4 text-sm text-green-500 font-medium text-center border border-green-600 py-2 rounded tracking-wide md:mt-6 md:text-lg md:tracking-wider">
+         <i className="fa-solid fa-check mr-2 md:mr-4 md:text-xl"></i>
+         You have already enrolled to this event.
+      </p>
+   );
+}
 
 function EventPage() {
    const { id } = useParams();
@@ -20,11 +30,9 @@ function EventPage() {
    }
    
    useEffect(() => {
+      // setEvent(events.find(e => e.id === id));
       isParticipant(authToken, id).then((data) => {
          setHasParticipated(data.isEnrolled);
-      }).catch(err => {
-         console.log(err);
-         setHasParticipated(false);
       });
    }, []);
    
@@ -50,9 +58,7 @@ function EventPage() {
                   Join here
                   <i className="fa-regular fa-hand-point-left ml-4 text-lg md:text-2xl"></i>
                </Link>
-            ) : (
-               <p className="mt-4 text-sm text-slate-400 font-semibold">You have already enrolled to this event.</p>
-            )}
+            ) : <ParticipatedMessage />}
          </div>
 
          <hr className="mt-5 mb-4 md:mt-8 md:mb-6" />
@@ -62,16 +68,15 @@ function EventPage() {
                Participants who joined <i className="fa-regular fa-arrow-right ml-2"></i>
             </h1>
             <div className="grid grid-cols-2 justify-items-center mt-4 gap-3 md:grid-cols-4 md:gap-4 md:mt-6">
-               {!!event?.participants.length &&
-                  event.participants.map((user, idx) => (
-                     <UserCard
-                        key={user.id}
-                        id={user.id}
-                        name={user.name}
-                        imageUrl={user.imageUrl}
-                        role={user.role}
-                     />
-                  ))}
+               {!!event?.participants.length && event?.participants.map((user, idx) => (
+                  <UserCard
+                     key={user.id}
+                     id={user.id}
+                     name={user.name}
+                     imageUrl={user.imageUrl}
+                     role={user.role}
+                  />
+               ))}
             </div>
          </div>
       </>

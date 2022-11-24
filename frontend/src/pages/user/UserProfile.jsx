@@ -3,20 +3,22 @@ import { useParams } from 'react-router-dom';
 import { useFetchUser } from '../../api/hooks';
 import useAuthStore from '../../context/AuthContext';
 import defaultProfileImage from '../../images/defaultProfile.png';
+import { UserNotFound } from '../../components';
 
 function UserProfilePage() {
    const { id } = useParams();
-   const authToken = useAuthStore(state => state.token);
-   const { user, isLoading, isError } = useFetchUser(authToken, id);
+   // const authToken = useAuthStore(state => state.token);
+   // const { user, isLoading, isError } = useFetchUser(authToken, id);
    
-   if (isLoading) {
-      return <h3>Loading...</h3>;
-   }
+   // if (isLoading) {
+   //    return <h3>Loading...</h3>;
+   // }
    
-   if (isError) {
-      console.log(isError);
-      return <h3>{isError.response.data.message}</h3>;
-   }
+   // if (isError) {
+   //    console.log(isError);
+   //    return <h3>{isError.response.data.message}</h3>;
+   // }
+   if (true) return <UserNotFound />;
    
    return (
       <section className="font-poppins mx-auto md:my-8 md:p-8 md:w-[90vw]">
