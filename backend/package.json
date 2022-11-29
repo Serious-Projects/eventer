@@ -1,8 +1,8 @@
 {
-   "name": "backend",
+   "name": "eventer-backend",
    "version": "0.0.1",
-   "description": "",
-   "author": "",
+   "description": "Backend for the eventer.io.",
+   "author": "Ayush Dedhia <ayushdedhia25@gmail.com>",
    "private": true,
    "license": "UNLICENSED",
    "scripts": {
@@ -10,7 +10,7 @@
       "build": "nest build",
       "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
       "start": "nest start",
-      "start:dev": "TZ=ASIA/KOLKATA nest start --watch",
+      "start:dev": "nest start --watch",
       "start:debug": "nest start --debug --watch",
       "start:prod": "node dist/main",
       "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

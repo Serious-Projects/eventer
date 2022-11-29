@@ -20,7 +20,7 @@ export function event(token) {
    return (...args) => instance.get(...args).then((res) => res.data);
 }
 
-export function createEvent(event) {
+export function createEvent(token, event) {
    instance.defaults.headers.common['authorization'] = `Bearer ${token}`;
    return instance.post('/events/create', event);
 }

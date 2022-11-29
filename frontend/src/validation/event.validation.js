@@ -12,33 +12,33 @@ export const createEventSchema = z.object({
       .nonempty({ message: 'Please describe this event!' })
       .trim(),
 
-   startDate: z.string()
+   beginAt: z.string()
       .nonempty({ message: 'Please specify, when is the event going to begin?' }),
 
-   endDate: z.string()
+   endAt: z.string()
       .nonempty({ message: 'Please specify, when is the event going to end?' }),
 
    deadline: z.string()
       .nonempty({ message: 'Please specify the deadline for the registration of this event' }),
-}).superRefine(({ startDate, endDate, deadline }, ctx) => {
+}).superRefine(({ beginAt, endAt, deadline }, ctx) => {
    // console.log(`Today: ${todaysDate.format()} AND startDate: ${startDate.format()}`);
-   if (moment(startDate).isAfter(todaysDate) || moment(startDate).format() !== todaysDate.format()) {
+   if (moment(beginAt).isAfter(todaysDate) || moment(beginAt).format() !== todaysDate.format()) {
       ctx.addIssue({
          code: 'custom',
-         path: ['startDate'],
+         path: ['beginAt'],
          message: "Please choose today's date or a date in future",
       });
    }
 
-   if (moment(endDate).isBefore(startDate)) {
+   if (moment(endAt).isBefore(beginAt)) {
       ctx.addIssue({
          code: 'custom',
-         path: ['endDate'],
+         path: ['endAt'],
          message: 'Cannot end an event before beginning it',
       });
    }
 
-   if (!moment(deadline).isBetween(startDate, endDate)) {
+   if (!moment(deadline).isBetween(moment(beginAt), moment(endAt))) {
       ctx.addIssue({
          code: 'custom',
          path: ['deadline'],

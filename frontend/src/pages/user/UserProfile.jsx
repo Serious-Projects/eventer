@@ -7,18 +7,20 @@ import { UserNotFound } from '../../components';
 
 function UserProfilePage() {
    const { id } = useParams();
-   // const authToken = useAuthStore(state => state.token);
-   // const { user, isLoading, isError } = useFetchUser(authToken, id);
+   const authToken = useAuthStore(state => state.token);
+   const { user, isLoading, isError } = useFetchUser(authToken, id);
    
-   // if (isLoading) {
-   //    return <h3>Loading...</h3>;
-   // }
+   if (isLoading) {
+      return <h3>Loading...</h3>;
+   }
    
-   // if (isError) {
-   //    console.log(isError);
-   //    return <h3>{isError.response.data.message}</h3>;
-   // }
-   if (true) return <UserNotFound />;
+   if (isError) {
+      console.log(isError);
+      if (isError.response.data.statusCode === 404) {
+         return <UserNotFound />;
+      }
+      return <h3>{isError.response.data.message}</h3>;
+   }
    
    return (
       <section className="font-poppins mx-auto md:my-8 md:p-8 md:w-[90vw]">

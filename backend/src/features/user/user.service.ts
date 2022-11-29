@@ -70,9 +70,16 @@ export class UserService extends BaseService {
       });
    }
    
-   async uploadImageToCloudinary(file: Express.Multer.File) {
-      return await this.cloudinary.uploadImage(file).catch((err) => {
+   uploadImageToCloudinary(file: Express.Multer.File) {
+      return this.cloudinary.uploadImage(file).catch((err) => {
          throw new BadRequestException(err.message);
       });
+   }
+   
+   async updateUserProfilePicture(oldImage: string, newImage: Express.Multer.File) {
+      return await Promise.all([
+         this.cloudinary.deleteImage(oldImage),
+         this.cloudinary.uploadImage(newImage),
+      ]);
    }
 }

@@ -21,7 +21,7 @@ export class EventsService extends BaseService {
       return this.prisma.event.findMany();
    }
 
-   create(userId: string, event: Prisma.EventCreateInput) {
+   create(event: Prisma.EventCreateInput) {
       return this.prisma.event.create({
          data: event,
       });

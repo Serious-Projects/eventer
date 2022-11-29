@@ -1,15 +1,39 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
+
 import { Input } from '../../components';
 import { createEventSchema } from '../../validation';
+import { createEvent } from '../../api/fetcher';
+import useAuthStore from '../../context/AuthContext';
 
 function CreateEventPage() {
    const { register, handleSubmit, watch, formState: { errors } } = useForm({
       resolver: zodResolver(createEventSchema),
    });
-
-   const submitEventData = (eventData) => {
-      console.log(eventData);
+   const authToken = useAuthStore(state => state.token);
+   const navigate = useNavigate();
+   
+   const submitEventData = async (eventData) => {
+      try {
+         const _eventData = {
+            ...eventData,
+            beginAt: moment(eventData.beginAt).format(),
+            endAt: moment(eventData.endAt).format(),
+            deadline: moment(eventData.deadline).format(),
+         };
+         console.log(_eventData);
+         const event = await createEvent(authToken, _eventData);
+         navigate('/');
+      } catch (err) {
+         console.log(err);
+         if (err.response.data.statusCode === 400) {
+            toast.error(err.response.data.message.join(', '));
+         }
+         toast.error(err.response.data.message);
+      }
    };
 
    return (
@@ -55,17 +79,17 @@ function CreateEventPage() {
                <Input
                   type="date"
                   labelText="Event start date"
-                  name="startDate"
+                  name="beginAt"
                   register={register}
-                  errorText={errors?.startDate}
+                  errorText={errors?.beginAt}
                />
                <Input
                   type="date"
                   labelText="event End date"
-                  name="endDate"
+                  name="endAt"
                   register={register}
-                  errorText={errors?.endDate}
-                  isDisabled={!watch('startDate')}
+                  errorText={errors?.endAt}
+                  isDisabled={!watch('beginAt')}
                />
                <Input
                   type="date"
@@ -73,7 +97,7 @@ function CreateEventPage() {
                   name="deadline"
                   register={register}
                   errorText={errors?.deadline}
-                  isDisabled={!watch('endDate')}
+                  isDisabled={!watch('endAt')}
                />
             </div>
 

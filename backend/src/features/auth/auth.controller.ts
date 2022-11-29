@@ -1,4 +1,4 @@
-import { Body, Controller, Post, HttpException } from "@nestjs/common";
+import { Body, Controller, Post, NotFoundException } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { LoginDto } from "./auth.dto";
 
@@ -8,8 +8,8 @@ export class AuthController {
 
    @Post("login")
    async login(@Body() credentials: LoginDto) {
-      const token = await this.authService.validateUser(credentials);
-      if (!token) throw new HttpException("Please check your credentials", 403);
-      return token;
+      const user = await this.authService.validateUser(credentials);
+      if (!user) throw new NotFoundException('You have not created an account yet! Please register and comeback.');
+      return user;
    }
 }

@@ -1,9 +1,9 @@
 import { IsDateString, IsString } from "class-validator";
-import { Expose } from "class-transformer";
+import { Expose, Type } from "class-transformer";
 
 export class CreateEventDto {
-   @IsString() title: string;
-   @IsString() description: string;
+   @IsString()     title: string;
+   @IsString()     description: string;
    @IsDateString() beginAt: Date;
    @IsDateString() endAt: Date;
    @IsDateString() deadline: Date;

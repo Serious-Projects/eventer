@@ -2,6 +2,7 @@ import { useLayoutEffect, useState, useEffect } from 'react';
 import { Link, useOutletContext, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'react-toastify';
 import { Input } from '../../components';
 import { loginSchema } from '../../validation';
 import { login } from '../../api/fetcher';
@@ -29,11 +30,10 @@ function LoginPage() {
       try {
          const { data } = await login(formData);
          saveUser(data.access_token);
-         setError(null);
          navigate(-1);
       } catch (err) {
-         if (err.response.data.statusCode === 404) {
-            setError(err.response.data.message);
+         if ([403, 404].includes(err.response.data.statusCode)) {
+            toast.error(err.response.data.message);
          }
       }
    };

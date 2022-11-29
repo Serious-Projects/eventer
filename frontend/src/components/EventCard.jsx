@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import moment from 'moment';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import moment from "moment";
 
 const Colors = {
-   red: 'bg-red-200 border-red-400',
-   blue: 'bg-blue-200 border-blue-400',
+   red: "bg-red-200 border-red-400",
+   blue: "bg-blue-200 border-blue-400",
 };
 
 function EventCard({ id, title, participantsCount, deadline, tags }) {
@@ -26,13 +26,16 @@ function EventCard({ id, title, participantsCount, deadline, tags }) {
                <strong>Tags: </strong>
                {tags.length > 0 ? (
                   tags.map(({ text, color }, idx) => (
-                     <span key={`${text}-${idx}`} className={`px-2 py-1 border ${Colors[color]} rounded-full`}>
+                     <span
+                        key={`${text}-${idx}`}
+                        className={`px-2 py-1 border ${Colors[color]} rounded-full`}
+                     >
                         {text}
                      </span>
                   ))
                ) : (
                   <em className="flex items-center gap-x-2">
-                     No tags found <i className="fa-regular fa-face-sad-tear text-sm"></i>
+                     No tags found <i className="fa-regular fa-face-sad-tear text-sm ml-1"></i>
                   </em>
                )}
             </p>
@@ -46,7 +49,7 @@ function EventCard({ id, title, participantsCount, deadline, tags }) {
                <div className="text-center flex justify-between items-center">
                   <strong className="font-medium">Deadline</strong>
                   <span className="text-sm">
-                     {moment(deadline).format('MMM Do YY, h:mm:ss a')}
+                     {moment(deadline).format("MMM Do YY, h:mm:ss a")}
                   </span>
                </div>
             </div>
@@ -54,9 +57,14 @@ function EventCard({ id, title, participantsCount, deadline, tags }) {
 
          <Link
             to={`/event/${id}`}
-            className={`block mt-4 w-full text-center font-poppins py-2 rounded text-white text-base tracking-wide shadow-md shadow-slate-300 ${isClosed ? 'pointer-events-none bg-slate-400' : 'bg-blue-400'}`}>
-            {isClosed ? 'Registration Closed' : 'View Details'} &nbsp;
-            <i className={`fa-regular fa-${isClosed ? 'ban' : 'arrow-right'}`}></i>
+            className={`block mt-4 w-full text-center font-poppins py-2 rounded text-white text-base tracking-wide shadow-md shadow-slate-300 ${
+               isClosed ? "pointer-events-none bg-slate-400" : "bg-blue-400"
+            }`}
+         >
+            {isClosed ? "Registration Closed" : "View Details"} &nbsp;
+            <i
+               className={`fa-regular fa-${isClosed ? "ban" : "arrow-right"}`}
+            ></i>
          </Link>
       </div>
    );
