@@ -2,7 +2,7 @@ import create from "zustand";
 import { persist } from "zustand/middleware";
 
 const AuthStore = (setState) => ({
-   token: "",
+   token: '',
    saveUser: (clientToken) => {
       setState((state) => ({ ...state, token: clientToken }));
    },

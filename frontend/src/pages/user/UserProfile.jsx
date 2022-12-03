@@ -27,7 +27,7 @@ function UserProfilePage() {
          <div className="h-[70vh] mt-14 px-3 py-5 md:h-[50vh] md:mt-48 md:bg-white md:shadow-md md:rounded-[0.425rem] md:shadow-slate-200">
             <div className="w-48 h-48 mx-auto -mt-16 bg-teal-400 rounded-full shadow-md shadow-slate-200 md:w-72 md:h-72 md:-mt-28">
                <img
-                  src={user?.imageUrl ?? defaultProfileImage}
+                  src={user?.profileUrl ?? defaultProfileImage}
                   className="w-full h-full rounded-full object-cover"
                />
             </div>

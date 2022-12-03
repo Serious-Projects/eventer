@@ -1,5 +1,5 @@
 generator client {
-  provider			= "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["filteredRelationCount"]
 }
 
@@ -23,15 +23,15 @@ model User {
 }
 
 model Event {
-  id           String      	@id @default(uuid())
-  title			String			@unique
+  id           String         @id @default(uuid())
+  title        String         @unique
   description  String
   beginAt      DateTime
   endAt        DateTime
   deadline     DateTime
   participants User[]
   submissions  Submission[]
-  createdAt    DateTime			@default(now())
+  createdAt    DateTime       @default(now())
 }
 
 model Submission {

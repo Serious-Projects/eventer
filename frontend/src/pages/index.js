@@ -1,6 +1,7 @@
 export { default as Home } from './Home';
 export { default as Login } from './auth/Login';
 export { default as Signup } from './auth/Registeration';
+export { default as Logout } from './auth/Logout';
 export { default as Event } from './event/Event';
 export { default as CreateEvent } from './event/CreateEvent';
 export { default as EventSubscription } from './event/EventSubscription';

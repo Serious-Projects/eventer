@@ -11,8 +11,6 @@ import useAuthStore from '../../context/AuthContext';
 
 function SignupPage() {
    const setLayoutData = useOutletContext();
-   const [error, setError] = useState(null);
-   const [imageMetadata, setImageMetadata] = useState({ image: null, name: '' });
    const [selectedFile, setSelectedFile] = useState(null);
    const navigate = useNavigate();
    const { token, saveUser } = useAuthStore((state) => ({ token: state.token, saveUser: state.saveUser }));
@@ -25,41 +23,38 @@ function SignupPage() {
    const submitFormData = async (formData) => {
       const { confirmPassword, ...data } = formData;
       try {
-         const result = await createProfile({
-            profile: data,
-            profilePicture: selectedFile,
-         });
-         setError(null);
+         // Create an account with the user data and profile picture
+         const result = await createProfile({ profile: data, profilePicture: selectedFile });
+         // Save the user auth data to the app state
          saveUser(result.access_token);
+         // Finally redirect the user back to the home page
          navigate('/');
       } catch (err) {
          console.error(err);
          if (err.response.data.statusCode === 409) {
-            setError(err.response.data.message);
+            // Error, if the email is already taken
+            toast.error(err.response.data.message);
          }
       }
    };
 
    useLayoutEffect(() => {
+      // Updating the page contents according to the auth type
       setLayoutData((prev) => ({ title: 'Signup', icon: 'user-plus' }));
    }, []);
    
    useEffect(() => {
+      // Check if the user is already logged-in, else redirect to the home page
       if (!!token) return navigate('/');
    }, []);
-   
-   if (error) {
-      toast.error(error);
-   }
 
    return (
       <form onSubmit={handleSubmit(submitFormData)}>
          <ImagePicker
             ref={inputRef}
             styles="mb-5"
-            imageMetadata={imageMetadata}
-            setImageMetadata={setImageMetadata}
             setSelectedFile={setSelectedFile}
+            register={register}
          />
          
          <div className="flex flex-col gap-5 mb-6 md:flex-row md:gap-x-5">

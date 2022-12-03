@@ -12,7 +12,6 @@ import {
    UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Prisma } from '@prisma/client';
 import { EventsService } from './events.service';
 import { CreateEventDto, EventDto } from './events.dtos';
 import { PrismaExceptionFilter } from '../../common/filters';

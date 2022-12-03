@@ -8,9 +8,10 @@ import {
    EventSubscription,
    Home,
    Login,
+   Logout,
+   ProfileUpdate,
    Signup,
    UserProfile,
-   ProfileUpdate,
 } from './pages';
 import { AuthLayout, EventLayout } from './pages/layouts';
 import ProtectedRoute from './ProtectedRoute';
@@ -31,6 +32,7 @@ function App() {
                <Route path="/auth" element={<AuthLayout />}>
                   <Route path="login" element={<Login />} />
                   <Route path="signup" element={<Signup />} />
+                  <Route path="logout" element={<Logout />} />
                </Route>
 
                <Route path="/event" element={<EventLayout />}>
