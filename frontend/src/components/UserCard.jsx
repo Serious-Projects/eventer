@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import defaultProfileImage from '../images/defaultProfile.png';
 
-function UserCard({ id, imageUrl, name, role }) {
+function UserCard({ id, imageUrl, name, role, profile }) {
    return (
       <Link to={`/user/${id}`} className="w-full">
          <div className="w-full px-1 py-3 border-2 border-dashed rounded-[0.45rem] font-poppins shadow">

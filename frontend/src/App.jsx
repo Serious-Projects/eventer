@@ -10,6 +10,7 @@ import {
    Login,
    Signup,
    UserProfile,
+   ProfileUpdate,
 } from './pages';
 import { AuthLayout, EventLayout } from './pages/layouts';
 import ProtectedRoute from './ProtectedRoute';
@@ -40,6 +41,7 @@ function App() {
 
                <Route element={<ProtectedRoute />}>
                   <Route path="/user/:id" element={<UserProfile />} />
+                  <Route path="/user/profile" element={<ProfileUpdate />} />
                </Route>
             </Routes>
          </main>

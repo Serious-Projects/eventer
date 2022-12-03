@@ -5,3 +5,4 @@ export { default as Event } from './event/Event';
 export { default as CreateEvent } from './event/CreateEvent';
 export { default as EventSubscription } from './event/EventSubscription';
 export { default as UserProfile } from './user/UserProfile';
+export { default as ProfileUpdate } from './user/ProfileUpdate';

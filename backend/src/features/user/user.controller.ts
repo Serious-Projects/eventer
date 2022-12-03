@@ -73,13 +73,20 @@ export class UserController {
    @UseInterceptors(FileInterceptor('profile'))
    @HttpCode(201)
    async uploadProfile(@UploadedFile() profileImg: Express.Multer.File) {
-      return await this.userService.uploadImageToCloudinary(profileImg);
+      const result = await this.userService.uploadImageToCloudinary(profileImg);
+      return result;
    }
    
    @Patch('update/upload')
+   @UseInterceptors(FileInterceptor('profile'))
    @HttpCode(201)
-   async updateUserProfile(@Query('oldImage') oldImage: string, @Body('image') newImage: Express.Multer.File) {
-      return await this.userService.updateUserProfilePicture(oldImage, newImage);
+   async updateUserProfile(
+      @Query('oldImage') oldImage: string,
+      @UploadedFile() newImage: Express.Multer.File
+   ) {
+      const result = await this.userService.updateUserProfilePicture(oldImage, newImage);
+      console.log('result', result);
+      return result;
    }
 
    @UseGuards(AuthGuard('jwt'))

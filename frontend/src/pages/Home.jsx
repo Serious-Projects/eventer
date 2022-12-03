@@ -1,9 +1,9 @@
-import { useEffect } from "react";
-import EventCard from "../components/EventCard";
-import UserCard from "../components/UserCard";
+import { useEffect } from 'react';
+import EventCard from '../components/EventCard';
+import UserCard from '../components/UserCard';
 // import { events } from '../data';
-import useAuthStore from "../context/AuthContext";
-import { useEvents } from "../api/hooks";
+import useAuthStore from '../context/AuthContext';
+import { useEvents } from '../api/hooks';
 
 function HomePage() {
    const authToken = useAuthStore((state) => state.token);

@@ -37,6 +37,8 @@ export class EventsService extends BaseService {
                   id: true,
                   name: true,
                   email: true,
+                  profile: true,
+                  profileUrl: true,
                },
             },
          },

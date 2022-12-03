@@ -1,30 +1,39 @@
-import { useLayoutEffect, useState, useEffect } from 'react';
+import { useLayoutEffect, useState, useEffect, useRef } from 'react';
 import { Link, useOutletContext, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Input } from '../../components';
+import { toast } from 'react-toastify';
+
+import { Input, ImagePicker } from '../../components';
 import { signupSchema } from '../../validation';
-import { signup } from '../../api/fetcher';
+import { createProfile } from '../../api/fetcher';
 import useAuthStore from '../../context/AuthContext';
 
 function SignupPage() {
    const setLayoutData = useOutletContext();
    const [error, setError] = useState(null);
+   const [imageMetadata, setImageMetadata] = useState({ image: null, name: '' });
+   const [selectedFile, setSelectedFile] = useState(null);
    const navigate = useNavigate();
    const { token, saveUser } = useAuthStore((state) => ({ token: state.token, saveUser: state.saveUser }));
+   const inputRef = useRef(null);
 
    const { register, handleSubmit, formState: { errors } } = useForm({
       resolver: zodResolver(signupSchema),
    });
 
    const submitFormData = async (formData) => {
-      const { confirmPassword, ...data_ } = formData;
+      const { confirmPassword, ...data } = formData;
       try {
-         const { data } = await signup(data_);
+         const result = await createProfile({
+            profile: data,
+            profilePicture: selectedFile,
+         });
          setError(null);
-         saveUser(data.access_token);
-         return navigate('/');
+         saveUser(result.access_token);
+         navigate('/');
       } catch (err) {
+         console.error(err);
          if (err.response.data.statusCode === 409) {
             setError(err.response.data.message);
          }
@@ -38,14 +47,20 @@ function SignupPage() {
    useEffect(() => {
       if (!!token) return navigate('/');
    }, []);
+   
+   if (error) {
+      toast.error(error);
+   }
 
    return (
       <form onSubmit={handleSubmit(submitFormData)}>
-         {!!error && (
-            <div className="my-4 py-2 px-3 bg-red-100 rounded border-2 border-red-300 md:py-3 md:px-0 md:mb-8">
-               <p className="text-red-500 text-xs tracking-wide md:text-lg md:text-center">{error}</p>
-            </div>
-         )}
+         <ImagePicker
+            ref={inputRef}
+            styles="mb-5"
+            imageMetadata={imageMetadata}
+            setImageMetadata={setImageMetadata}
+            setSelectedFile={setSelectedFile}
+         />
          
          <div className="flex flex-col gap-5 mb-6 md:flex-row md:gap-x-5">
             <Input

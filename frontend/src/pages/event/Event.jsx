@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { toast } from 'react-toastify';
 import { UserCard } from "../../components";
 import { useEvent } from "../../api/hooks";
-import { isParticipant } from "../../api/fetcher";
 import useAuthStore from "../../context/AuthContext";
 import { EventNotFound } from "../../components";
+import { useEventTracker } from '../../hooks';
 // import { events, participants } from "../../data";
 
 function ParticipatedMessage() {
@@ -19,8 +19,8 @@ function ParticipatedMessage() {
 function EventPage() {
    const { id } = useParams();
    const authToken = useAuthStore((state) => state.token);
-   const [hasParticipated, setHasParticipated] = useState(false);
    const { event, isLoading, isError } = useEvent(authToken, id);
+   const { participated, error } = useEventTracker(authToken, id);
    
    if (isError) {
       console.log(isError);
@@ -29,12 +29,11 @@ function EventPage() {
       }
    }
    
-   useEffect(() => {
-      // setEvent(events.find(e => e.id === id));
-      isParticipant(authToken, id).then((data) => {
-         setHasParticipated(data.isEnrolled);
-      });
-   }, []);
+   if (error) {
+      if (error.statusCode === 404) {
+         toast.error('Sorry, the user you are searching for dont exists!');
+      }
+   }
    
    if (isLoading) {
       return <h2>Loading...</h2>;
@@ -49,7 +48,7 @@ function EventPage() {
             <p className="mt-3 text-slate-400 text-sm leading-6 md:text-xl md:mt-4 md:leading-8">
                {event?.description}
             </p>
-            {!hasParticipated ? (
+            {!participated ? (
                <Link
                   to={`/event/subscribe/${event.id}`}
                   className="block bg-blue-300 text-blue-800 text-center tracking-wide uppercase text-sm mt-4 py-3 rounded-full font-semibold shadow-md md:mt-6 md:py-4 md:text-xl"
@@ -73,8 +72,9 @@ function EventPage() {
                      key={user.id}
                      id={user.id}
                      name={user.name}
-                     imageUrl={user.imageUrl}
+                     imageUrl={user.profileUrl}
                      role={user.role}
+                     profile={user.profile}
                   />
                ))}
             </div>

@@ -6,3 +6,4 @@ export { default as Input } from "./Input";
 export { default as EventNotFound } from "./EventNotFound";
 export { default as UserNotFound } from "./UserNotFound";
 export { default as ConfirmBox } from "./Confirm";
+export { default as ImagePicker } from "./ImagePicker";

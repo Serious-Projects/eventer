@@ -12,6 +12,8 @@ model User {
   id          String       @id @default(uuid())
   name        String
   email       String       @unique
+  profile     String?
+  profileUrl  String?
   salt        String
   password    String
   joinedAt    DateTime     @default(now())

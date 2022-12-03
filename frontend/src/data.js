@@ -2,6 +2,7 @@ export const navigation = [
    { to: '/', text: 'Home', icon: 'home-user' },
    { to: '/auth/login', text: 'Login', icon: 'right-to-bracket' },
    { to: '/auth/signup', text: 'Signup', icon: 'user-plus' },
+   { to: '/auth/logout', text: 'Logout', icon: 'right-from-bracket' },
 ];
 
 export const events = [

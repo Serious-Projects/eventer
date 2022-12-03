@@ -17,6 +17,8 @@ export class UserService extends BaseService {
             id: true,
             name: true,
             email: true,
+            profile: true,
+            profileUrl: true,
          },
       });
    }
@@ -49,6 +51,8 @@ export class UserService extends BaseService {
             id: true,
             name: true,
             email: true,
+            profile: true,
+            profileUrl: true,
          },
       });
    }
@@ -77,9 +81,15 @@ export class UserService extends BaseService {
    }
    
    async updateUserProfilePicture(oldImage: string, newImage: Express.Multer.File) {
-      return await Promise.all([
-         this.cloudinary.deleteImage(oldImage),
-         this.cloudinary.uploadImage(newImage),
-      ]);
+      try {
+         const oldImageResult = await this.cloudinary.deleteImage(oldImage);
+         if (oldImageResult.result === 'not found') {
+            throw new BadRequestException('old-image not found');
+         }
+         const { url, secure_url, public_id, format } = await this.uploadImageToCloudinary(newImage);
+         return { url, secure_url, public_id, format };
+      } catch (err) {
+         throw new BadRequestException(err.message);
+      }
    }
 }

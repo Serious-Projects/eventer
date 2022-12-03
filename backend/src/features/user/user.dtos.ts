@@ -1,4 +1,4 @@
-import { IsString, IsEmail } from "class-validator";
+import { IsString, IsEmail, IsUrl } from "class-validator";
 import { Expose } from "class-transformer";
 
 export class CreateUserDto {
@@ -11,6 +11,12 @@ export class CreateUserDto {
 
    @IsString()
    password: string;
+   
+   @IsString()
+   profile?: string;
+   
+   @IsUrl()
+   profileUrl?: string;
 }
 
 export class UserDto {
