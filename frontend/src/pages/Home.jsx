@@ -27,7 +27,7 @@ function HomePage() {
    }
 
    return (
-      <section className="my-3 mx-auto md:my-8 md:p-8 md:w-[90vw] md:bg-white md:shadow-md md:rounded-[0.425rem] md:shadow-slate-200">
+      <section className="section">
          <h1 className="text-xl md:text-2xl tracking-wide font-poppins mb-3 font-semibold">
             Latest Events
             <i className="fa-regular fa-arrow-right ml-2 text-indigo-600 animate-move-in"></i>

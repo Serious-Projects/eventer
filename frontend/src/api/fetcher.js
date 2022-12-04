@@ -60,7 +60,7 @@ export function uploadProfilePicture(newImage) {
 
 export function createProfile({ profile, profilePicture }) {
    return new Promise(async (resolve, reject) => {
-      if (Object.entries(profile).length && profilePicture) {
+      if (!!Object.entries(profile).length) {
          try {
             const { data: { public_id, secure_url } } = await uploadProfilePicture(profilePicture);
             const result = await signup({

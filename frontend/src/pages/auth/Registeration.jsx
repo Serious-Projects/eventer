@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState, useEffect, useRef } from 'react';
+import { useLayoutEffect, useState, useEffect } from 'react';
 import { Link, useOutletContext, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,7 +14,6 @@ function SignupPage() {
    const [selectedFile, setSelectedFile] = useState(null);
    const navigate = useNavigate();
    const { token, saveUser } = useAuthStore((state) => ({ token: state.token, saveUser: state.saveUser }));
-   const inputRef = useRef(null);
 
    const { register, handleSubmit, formState: { errors } } = useForm({
       resolver: zodResolver(signupSchema),
@@ -50,13 +49,7 @@ function SignupPage() {
 
    return (
       <form onSubmit={handleSubmit(submitFormData)}>
-         <ImagePicker
-            ref={inputRef}
-            styles="mb-5"
-            setSelectedFile={setSelectedFile}
-            register={register}
-         />
-         
+         <ImagePicker styles="mb-5" setSelectedFile={setSelectedFile} />
          <div className="flex flex-col gap-5 mb-6 md:flex-row md:gap-x-5">
             <Input
                type="text"

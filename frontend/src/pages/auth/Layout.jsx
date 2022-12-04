@@ -5,7 +5,7 @@ function AuthLayout() {
    const [pageLayoutData, setPageLayoutData] = useState({});
 
    return (
-      <section className="font-poppins mx-auto md:my-8 md:p-8 md:w-[90vw] md:bg-white md:shadow-md md:rounded-[0.325rem] md:shadow-slate-200">
+      <section className="section">
          <h2 className="mt-3 text-3xl font-semibold text-center text-teal-500 md:text-4xl md:mb-5">
             {pageLayoutData?.title} &nbsp;
             <i className={`fa-solid fa-${pageLayoutData?.icon}`}></i>

@@ -2,8 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+   .section {
+      @apply font-poppins my-3 mx-auto md:my-8 md:p-8 md:w-[90vw] md:bg-white md:shadow-md md:rounded-[0.425rem] md:shadow-slate-200;
+   }
+}
+
 @keyframes move-in {
-   0%, 100% {
+   0%,
+   100% {
       transform: translateX(0);
    }
    50% {

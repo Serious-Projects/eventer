@@ -18,22 +18,12 @@ export const signupSchema = z.object({
    confirmPassword: z.string()
       .nonempty({ message: 'Please repeat your password' })
       .trim(),
-   
-   profile: z.instanceof(File),
-}).superRefine(({ password, confirmPassword, profile }, ctx) => {
+}).superRefine(({ password, confirmPassword }, ctx) => {
    if (password !== confirmPassword) {
       ctx.addIssue({
          code: z.ZodIssueCode.custom,
          message: "Password and repeat password don't match!",
          path: ['confirmPassword'],
-      });
-   }
-   
-   if (!['jpg', 'png', 'jpeg'].includes(profile.type)) {
-      ctx.addIssue({
-         code: z.ZodIssueCode.custom,
-         message: `Image of type '${profile.type}' is not allowed!`,
-         path: ['profile'],
       });
    }
 });
