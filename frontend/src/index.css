@@ -3,8 +3,16 @@
 @tailwind utilities;
 
 @layer base {
+   h1, h2, h3, h4, h5, h6 {
+      font-family: 'Poppins', sans-serif;
+   }
+   
+   p, small, input, button, a {
+      font-family: 'Roboto Mono', sans-serif;
+   }
+   
    .section {
-      @apply font-poppins my-3 mx-auto md:my-8 md:p-8 md:w-[90vw] md:bg-white md:shadow-md md:rounded-[0.425rem] md:shadow-slate-200;
+      @apply my-3 mx-auto md:my-8 md:p-8 md:w-[90vw] md:bg-white md:shadow-md md:rounded-[0.425rem] md:shadow-slate-200;
    }
 }
 

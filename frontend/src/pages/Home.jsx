@@ -39,7 +39,7 @@ function HomePage() {
                   key={event.id}
                   id={event.id}
                   title={event.title}
-                  participantsCount={event.participantsCount}
+                  participantsCount={event?._count.participants}
                   deadline={event.deadline}
                   tags={event.tags ?? []}
                />

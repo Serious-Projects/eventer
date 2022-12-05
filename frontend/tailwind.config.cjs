@@ -5,6 +5,7 @@ module.exports = {
       extend: {
          fontFamily: {
             poppins: ["'Poppins'", "sans-serif"],
+            "roboto-mono": ["'Roboto Mono'", "sans-serif"],
          },
          animation: {
             "move-in": "move-in 1s infinite",

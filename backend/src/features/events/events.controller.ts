@@ -30,8 +30,7 @@ export class EventsController {
    @UseGuards(AuthGuard('jwt'))
    @Get('my')
    async getUserEvents(@User() user: ReqUser) {
-      const { events } = await this.eventsService.getUserEvents(user.sub);
-      return events;
+      return await this.eventsService.getUserEvents(user.sub);
    }
 
    @UseGuards(AuthGuard('jwt'))

@@ -95,7 +95,7 @@ function SignupPage() {
             >
                Signup <i className="fa-regular fa-user-plus ml-2"></i>
             </button>
-            <Link to="/auth/login">
+            <Link to="/auth/login" className="text-sm">
                Already have an account? <span className="text-blue-600">Login here.</span>
             </Link>
          </div>

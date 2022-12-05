@@ -12,13 +12,23 @@ export class EventsService extends BaseService {
    async getUserEvents(userId: string) {
       if (!(await this.userExists(userId))) throw UserNotFoundException;
       return this.prisma.user.findUnique({
-         where: { id: userId },
-         select: { events: true },
-      });
+         where: {
+            id: userId,
+         },
+      })
+      .events();
    }
 
    getPublic() {
-      return this.prisma.event.findMany();
+      return this.prisma.event.findMany({
+         include: {
+            _count: {
+               select: {
+                  participants: true,
+               },
+            },
+         },
+      });
    }
 
    create(event: Prisma.EventCreateInput) {

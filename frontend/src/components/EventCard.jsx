@@ -19,7 +19,7 @@ function EventCard({ id, title, participantsCount, deadline, tags }) {
    }, []);
 
    return (
-      <div className="p-4 md:flex md:flex-col md:justify-between border-2 border-purple-300 border-dashed rounded-[0.35rem] font-poppins">
+      <div className="p-4 md:flex md:flex-col md:justify-between border-2 border-purple-300 border-dashed rounded-[0.35rem]">
          <h3 className="text-lg">{title}</h3>
          <div className="w-full">
             <p className="mt-2 mb-4 p-2 font-poppins text-[0.65rem] flex items-center gap-x-2 border border-dashed rounded">
@@ -43,7 +43,7 @@ function EventCard({ id, title, participantsCount, deadline, tags }) {
             <div className="mt-2 p-2 flex flex-col gap-y-2 border border-dashed rounded">
                <div className="text-center flex justify-between items-center">
                   <strong className="font-medium">Participants</strong>
-                  <span>{participantsCount}</span>
+                  <span>{participantsCount ?? 0}</span>
                </div>
                <hr />
                <div className="text-center flex justify-between items-center">

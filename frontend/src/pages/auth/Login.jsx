@@ -64,9 +64,9 @@ function LoginPage() {
                type="submit"
                className="w-full py-2 bg-teal-500 text-white rounded uppercase font-semibold tracking-wider shadow-md md:w-32 md:text-lg"
             >
-               Login &nbsp;<i className="fa-regular fa-right-to-bracket"></i>
+               Login <i className="fa-regular fa-right-to-bracket ml-2"></i>
             </button>
-            <Link to="/auth/signup">
+            <Link to="/auth/signup" className="text-sm">
                Don't have an account?{" "}
                <span className="text-blue-600">Create One.</span>
             </Link>
