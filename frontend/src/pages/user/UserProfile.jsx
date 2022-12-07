@@ -15,7 +15,6 @@ function UserProfilePage() {
    }
    
    if (isError) {
-      console.log(isError);
       if (isError.response.data.statusCode === 404) {
          return <UserNotFound />;
       }

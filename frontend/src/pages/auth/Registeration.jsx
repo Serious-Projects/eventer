@@ -29,8 +29,9 @@ function SignupPage() {
          // Finally redirect the user back to the home page
          navigate('/');
       } catch (err) {
-         console.error(err);
-         if (err.response.data.statusCode === 409) {
+         if (err.name === 'AxiosError' && err.code === 'ERR_NETWORK') {
+            toast.error('Our service is down for a while. Please come again after a moment.');
+         } else if (err.response.data.statusCode === 409) {
             // Error, if the email is already taken
             toast.error(err.response.data.message);
          }

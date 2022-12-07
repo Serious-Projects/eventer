@@ -10,7 +10,9 @@ function HomePage() {
    const { events, isError, isLoading } = useEvents(authToken);
 
    if (isError) {
-      console.log(isError);
+      if (isError.name === 'AxiosError' && isError.code === 'ERR_NETWORK') {
+         return <h4>Our service is down for a while!</h4>;
+      }
       return <h4>{isError.response.data.message}</h4>;
    }
 

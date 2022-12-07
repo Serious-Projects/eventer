@@ -32,7 +32,9 @@ function LoginPage() {
          saveUser(data.access_token);
          navigate(-1);
       } catch (err) {
-         if ([403, 404].includes(err.response.data.statusCode)) {
+         if (err.name === 'AxiosError' && err.code === 'ERR_NETWORK') {
+            toast.error('Our service is down for a while. Please come again after a moment.');
+         } else if ([403, 404].includes(err.response.data.statusCode)) {
             toast.error(err.response.data.message);
          }
       }

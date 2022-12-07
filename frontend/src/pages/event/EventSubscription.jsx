@@ -16,7 +16,9 @@ function EventSubscriptionPage() {
          const { data: event } = await enrollEvent(authToken, id);
          if (event.id === id) setConfirmed(true);
       } catch (err) {
-         if (err.response.data.statusCode === 400) {
+         if (err.name === 'AxiosError' && err.code === 'ERR_NETWORK') {
+            toast.error('Our service is down for a while. Please come again after a moment.');
+         } else if (err.response.data.statusCode === 400) {
             alert(err.response.data.message);
             return navigate(-1);
          }

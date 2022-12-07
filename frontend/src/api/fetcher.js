@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const instance = axios.create({
+export const api = axios.create({
    baseURL: 'http://localhost:3000',
    headers: {
       'Content-Type': 'application/json',
@@ -8,57 +8,144 @@ export const instance = axios.create({
 });
 
 // Auth API Fetchers
-export const login = (credentials) => instance.post('/v1/auth/login', credentials);
-export const signup = (credentials) => instance.post('/users/create', credentials);
+export const login = (credentials) => api.post('/v1/auth/login', credentials);
+export const signup = (credentials) => api.post('/users/create', credentials);
 
 // Event API Fetchers
 export function event(token) {
-   instance.defaults.headers.common.authorization = `Bearer ${token}`;
-   return (url) => instance.get(url).then((res) => res.data);
+   /**
+    * Fetches all the events from the backend.
+    * 
+    * @param {string} token — JWT Auth Token for authentication.
+    * @returns Event[]
+    */
+   api.interceptors.request.use((config) => {
+      config.headers.authorization = `Bearer ${token}`;
+      return config;
+   });
+   return (url) => api.get(url).then((res) => res.data);
 }
 
 export function createEvent(token, event) {
-   instance.defaults.headers.common.authorization = `Bearer ${token}`;
-   return instance.post('/events/create', event);
+   /**
+    * Creates an event from the data provided.
+    * 
+    * @param {string} token — JWT Auth Token for authentication.
+    * @param {Event} event  — Event details.
+    * @returns Event
+    */
+   api.interceptors.request.use((config) => {
+      config.headers.authorization = `Bearer ${token}`;
+      return config;
+   });
+   return api.post('/events/create', event);
 }
 
 export function enrollEvent(token, eventId) {
-   instance.defaults.headers.common.authorization = `Bearer ${token}`;
-   return instance.get(`/events/enroll/${eventId}`);
+   /**
+    * Registers the user to the particular event.
+    * 
+    * @param {string} token   — JWT Auth Token for authentication.
+    * @param {string} eventId — Event ID to check for the registration.
+    * @returns { id: <string> }
+    */
+   api.interceptors.request.use((config) => {
+      config.headers.authorization = `Bearer ${token}`;
+      return config;
+   });
+   return api.get(`/events/enroll/${eventId}`);
 }
 
-export function withdrawEventEnrollment(eventId) {
-   instance.defaults.headers.common.authorization = `Bearer ${token}`;
-   return instance.get(`/events/withdraw/${eventId}`);
+export function withdrawEventEnrollment(token, eventId) {
+   /**
+    * Unregisters the user from the particular event.
+    * 
+    * @param {string} token   — JWT Auth Token for authentication.
+    * @param {string} eventId — Event ID to unregister from the event.
+    * @returns { id: <string> }
+    */
+   api.interceptors.request.use((config) => {
+      config.headers.authorization = `Bearer ${token}`;
+      return config;
+   });
+   return api.get(`/events/withdraw/${eventId}`);
 }
 
 // User API Fetchers
 export function fetchUser(token, userId) {
-   instance.defaults.headers.common.authorization = `Bearer ${token}`;
-   return (url) => instance.get(url).then((res) => res.data);
+   /**
+    * Gets the particular user from the backend.
+    * 
+    * @param {string} token  — JWT Auth Token for authentication.
+    * @param {string} userId — User ID to get the user.
+    * @returns User
+    */
+   api.interceptors.request.use((config) => {
+      config.headers.authorization = `Bearer ${token}`;
+      return config;
+   });
+   return (url) => api.get(url).then((res) => res.data);
 }
 
 export function isParticipant(token, eventId) {
-   instance.defaults.headers.common.authorization = `Bearer ${token}`;
-   return instance
-      .get(`/events/check-participation/${eventId}`)
-      .then((res) => res.data);
+   /**
+    * Checks wheather the user has registered to the particular event.
+    * 
+    * @param {string} token   — JWT Auth Token for authentication.
+    * @param {string} eventId — Event ID to check for the event registration.
+    * @returns { isEnrolled: <boolean> }
+    */
+   api.interceptors.request.use((config) => {
+      config.headers.authorization = `Bearer ${token}`;
+      return config;
+   });
+   return api.get(`/events/check-participation/${eventId}`).then((res) => res.data);
 }
 
-export function updateProfilePicture(token, data, oldImage) {
-   instance.defaults.headers.common.authorization = `Bearer ${token}`;
-   return instance.patch('/events/update/upload', data, {
-      params: { oldImage },
+export function updateProfilePicture(token, data, oldImageId) {
+   /**
+    * Updates the user's profile display picture.
+    * 
+    * @param {string} token      — JWT Auth Token for authentication.
+    * @param {Object} data       — Profile picture data.
+    * @param {string} oldImageId — Current image ID to delete and replace with the new image.
+    * @returns Unknown
+    */
+   api.interceptors.request.use((config) => {
+      config.headers.authorization = `Bearer ${token}`;
+      return config;
+   });
+   return api.patch('/events/update/upload', data, {
+      params: {
+         oldImage: oldImageId,
+      },
    });
 }
 
 export function uploadProfilePicture(newImage) {
+   /**
+    * Creates the user's profile display picture.
+    * 
+    * @param {string} newImage — New image data.
+    * @returns { public_id: <string>, secure_url: <string> }
+    */
+   api.interceptors.request.use((config) => {
+      delete config.headers['Content-Type'];
+      return config;
+   });
    const formData = new FormData();
    formData.append('profile', newImage);
-   return axios.post('http://localhost:3000/users/create/upload', formData);
+   return api.post('/users/create/upload', formData);
 }
 
 export function createProfile({ profile, profilePicture }) {
+   /**
+    * Creates a new user.
+    * 
+    * @param {Object} profile        — New user's data.
+    * @param {string} profilePicture — New image data.
+    * @returns User
+    */
    return new Promise(async (resolve, reject) => {
       if (!!Object.entries(profile).length) {
          try {
@@ -72,8 +159,7 @@ export function createProfile({ profile, profilePicture }) {
          } catch (err) {
             reject(err);
          }
-      } else {
-         reject(new Error('Could not create profile'));
       }
+      reject(new Error('Could not create profile'));
    });
 }
