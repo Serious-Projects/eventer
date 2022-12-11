@@ -78,15 +78,15 @@ export class UserController {
    }
    
    @Patch('update/upload')
+   @UseGuards(AuthGuard('jwt'))
    @UseInterceptors(FileInterceptor('profile'))
    @HttpCode(201)
    async updateUserProfile(
       @Query('oldImage') oldImage: string,
-      @UploadedFile() newImage: Express.Multer.File
+      @UploadedFile() newImage: Express.Multer.File,
+      @User() user: ReqUser
    ) {
-      const result = await this.userService.updateUserProfilePicture(oldImage, newImage);
-      console.log('result', result);
-      return result;
+      return this.userService.updateUserProfilePicture(oldImage, newImage, user.sub);
    }
 
    @UseGuards(AuthGuard('jwt'))

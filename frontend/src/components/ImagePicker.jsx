@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import defaultProfileImage from '../images/defaultProfile.png';
 
-function ImagePicker({ styles, setSelectedFile }) {
+function ImagePicker({ styles, setSelectedFile, oldImageUrl, profilePicId }) {
    const [imageMetadata, setImageMetadata] = useState({ image: null, name: '' });
    const inputRef = useRef(null);
    
@@ -25,7 +25,7 @@ function ImagePicker({ styles, setSelectedFile }) {
       <div className={`font-poppins ${styles && styles}`}>
          <div className="relative w-48 h-48 mx-auto md:w-64 md:h-64">
             <img
-               src={imageMetadata?.image ?? defaultProfileImage}
+               src={(imageMetadata?.image || oldImageUrl) || defaultProfileImage}
                alt="Profile Picture"
                className="w-full h-full rounded-full bg-slate-100 object-cover border-4"
             />
@@ -33,7 +33,8 @@ function ImagePicker({ styles, setSelectedFile }) {
                <i className="fa-regular fa-camera md:text-xl"></i>
             </div>
          </div>
-         <h4 className="text-center mt-3 text-sm md:text-lg md:mt-5">{imageMetadata?.name}</h4>
+         
+         <h4 className="text-center mt-3 text-sm md:text-lg md:mt-5 font-roboto-mono">{imageMetadata?.name || profilePicId}</h4>
          
          <input
             ref={inputRef}

@@ -102,7 +102,7 @@ export function isParticipant(token, eventId) {
    return api.get(`/events/check-participation/${eventId}`).then((res) => res.data);
 }
 
-export function updateProfilePicture(token, data, oldImageId) {
+export function updateProfilePicture(token, image, oldImageId) {
    /**
     * Updates the user's profile display picture.
     * 
@@ -113,9 +113,12 @@ export function updateProfilePicture(token, data, oldImageId) {
     */
    api.interceptors.request.use((config) => {
       config.headers.authorization = `Bearer ${token}`;
+      delete config.headers['Content-Type'];
       return config;
    });
-   return api.patch('/events/update/upload', data, {
+   const formData = new FormData();
+   formData.append('profile', image);
+   return api.patch('/users/update/upload', formData, {
       params: {
          oldImage: oldImageId,
       },

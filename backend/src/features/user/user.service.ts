@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException, InternalServerErrorException } from "@nestjs/common";
+import { Injectable, BadRequestException, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { CreateUserDto } from "./user.dtos";
 import { Hashing } from "../../utils";
 import { BaseService } from "../../common/baseService";
@@ -27,6 +27,13 @@ export class UserService extends BaseService {
       return this.prisma.user.findUnique({
          where: {
             id: uuid,
+         },
+         select: {
+            id: true,
+            name: true,
+            email: true,
+            profile: true,
+            profileUrl: true,
          },
       });
    }
@@ -63,6 +70,13 @@ export class UserService extends BaseService {
             id: uuid,
          },
          data: patchDto,
+         select: {
+            id: true,
+            name: true,
+            email: true,
+            profile: true,
+            profileUrl: true,
+         },
       });
    }
 
@@ -70,6 +84,11 @@ export class UserService extends BaseService {
       return this.prisma.user.delete({
          where: {
             id: uuid,
+         },
+         select: {
+            id: true,
+            name: true,
+            email: true,
          },
       });
    }
@@ -80,14 +99,17 @@ export class UserService extends BaseService {
       });
    }
    
-   async updateUserProfilePicture(oldImage: string, newImage: Express.Multer.File) {
+   async updateUserProfilePicture(oldImage: string, newImage: Express.Multer.File, userId: string) {
       try {
          const oldImageResult = await this.cloudinary.deleteImage(oldImage);
          if (oldImageResult.result === 'not found') {
-            throw new BadRequestException('old-image not found');
+            throw new NotFoundException('old-image not found');
          }
          const { url, secure_url, public_id, format } = await this.uploadImageToCloudinary(newImage);
-         return { url, secure_url, public_id, format };
+         return this.update(userId, {
+            profile: public_id,
+            profileUrl: secure_url,
+         });
       } catch (err) {
          throw new BadRequestException(err.message);
       }

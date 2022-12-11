@@ -1,5 +1,5 @@
-import create from "zustand";
-import { persist } from "zustand/middleware";
+import create from 'zustand';
+import { persist } from 'zustand/middleware';
 
 const AuthStore = (setState) => ({
    token: '',
@@ -7,10 +7,10 @@ const AuthStore = (setState) => ({
       setState((state) => ({ ...state, token: clientToken }));
    },
    logoutUser: () => {
-      setState((state) => ({ ...state, token: "" }));
+      setState((state) => ({ ...state, token: '' }));
    },
 });
 
-const useAuthStore = create(persist(AuthStore, { name: "authStore" }));
+const useAuthStore = create(persist(AuthStore, { name: 'authStore' }));
 
 export default useAuthStore;
