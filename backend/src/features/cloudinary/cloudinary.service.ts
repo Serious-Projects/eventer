@@ -6,9 +6,9 @@ import * as toStream from 'buffer-to-stream';
 export class CloudinaryService {
    uploadImage(file: Express.Multer.File): Promise<UploadApiResponse | UploadApiErrorResponse> {
       return new Promise((resolve, reject) => {
-         const upload = v2.uploader.upload_stream((err, result) => {
-            if (err) return reject(err);
-            resolve(result);
+         const upload = v2.uploader.upload_stream({ folder: 'images' }, (err, result) => {
+            if (err) reject(err);
+            else resolve(result);
          });
          toStream(file.buffer).pipe(upload);
       });
