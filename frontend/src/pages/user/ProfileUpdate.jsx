@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import tw from 'twin.macro';
+
+import { Paper, Title } from '../../elements';
 import { ImagePicker } from '../../components';
 import { updateProfilePicture } from '../../api/fetcher';
 import useAuthStore from '../../context/AuthContext';
@@ -16,11 +19,10 @@ function ProfileUpdate() {
    const updateProfilePic = (e) => {
       updateProfilePicture(authToken, selectedImage, imageID)
          .then(({ data }) => {
-            console.log(data);
             navigate(`/user/${data.id}`);
          })
          .catch(err => {
-            if (err.response.data.statusCode === 400) {
+            if ([400, 404].includes(err.response.data.statusCode)) {
                toast.error(err.response.data.message);
                return;
             }
@@ -29,8 +31,8 @@ function ProfileUpdate() {
    };
    
    return (
-      <>
-         <h2 className="mt-3 text-2xl font-poppins font-semibold text-center">Update Profile Picture</h2>
+      <Paper>
+         <Title css={[tw`font-poppins`]}>Update Profile Picture</Title>
          <ImagePicker
             styles="mt-5"
             oldImageUrl={url}
@@ -44,7 +46,7 @@ function ProfileUpdate() {
          >
             Update Profile Picture
          </button>
-      </>
+      </Paper>
    );
 }
 

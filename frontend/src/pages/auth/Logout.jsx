@@ -1,6 +1,7 @@
 import { useLayoutEffect, useState, useEffect } from 'react';
 import { Link, useOutletContext, useNavigate } from 'react-router-dom';
 import useAuthStore from '../../context/AuthContext';
+import { PrimaryButton, SecondaryButton } from '../../elements';
 
 function Logout() {
    const setLayoutData = useOutletContext();
@@ -22,14 +23,14 @@ function Logout() {
    
    return (
       <section>
-         <h2 className="tracking-wide md:text-2xl">Ohh crap! You are leaving us {'🥲'}... Are you sure?</h2>
-         <div className="space-y-4 md:space-x-4">
-            <button className="btn btn--primary" onClick={(e) => navigate('/')}>
+         <h2 className="text-2xl font-medium tracking-wide md:text-3xl">Ohh crap! You are leaving us {'🥲'}... Are you sure?</h2>
+         <div className="flex flex-col mt-4 space-y-2 md:flex-row md:space-y-0 md:space-x-4">
+            <PrimaryButton onClick={(e) => navigate('/')}>
                Naah! Just Kidding
-            </button>
-            <button className="btn border border-blue-500" onClick={logout}>
+            </PrimaryButton>
+            <SecondaryButton onClick={logout}>
                Yes, Log Me Out
-            </button>
+            </SecondaryButton>
          </div>
       </section>
    );

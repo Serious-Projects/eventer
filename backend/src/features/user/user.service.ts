@@ -93,25 +93,25 @@ export class UserService extends BaseService {
       });
    }
    
-   uploadImageToCloudinary(file: Express.Multer.File) {
-      return this.cloudinary.uploadImage(file).catch((err) => {
+   uploadImageToCloudinary(file: Express.Multer.File, publicId?: string) {
+      return this.cloudinary.uploadImage(file, publicId && publicId).catch((err) => {
          throw new BadRequestException(err.message);
       });
    }
    
    async updateUserProfilePicture(oldImage: string, newImage: Express.Multer.File, userId: string) {
-      try {
-         const oldImageResult = await this.cloudinary.deleteImage(oldImage);
-         if (oldImageResult.result === 'not found') {
-            throw new NotFoundException('old-image not found');
+      if (newImage && newImage.buffer) {
+         try {
+            const oldImageResult = await this.cloudinary.deleteImage(oldImage);
+            if (oldImageResult.result === 'not found') {
+               throw new NotFoundException('old-image not found');
+            }
+            const { public_id } = await this.uploadImageToCloudinary(newImage, oldImage);
+            return { publicId: public_id };
+         } catch (err) {
+            throw new BadRequestException(err.message);
          }
-         const { url, secure_url, public_id, format } = await this.uploadImageToCloudinary(newImage);
-         return this.update(userId, {
-            profile: public_id,
-            profileUrl: secure_url,
-         });
-      } catch (err) {
-         throw new BadRequestException(err.message);
       }
+      throw new BadRequestException('image was not provided or is corrupted');
    }
 }

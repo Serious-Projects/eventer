@@ -3,7 +3,20 @@ import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+   optimizeDeps: {
+      esbuildOptions: {
+         target: "es2020",
+      },
+   },
+   esbuild: {
+      logOverride: { "this-is-undefined-in-esm": "silent" },
+   },
    plugins: [
-      react({ include: '**/*.jsx' }),
+      react({
+         include: "**/*.jsx",
+         babel: {
+            plugins: ["babel-plugin-macros", "babel-plugin-styled-components"],
+         },
+      }),
    ],
 });
