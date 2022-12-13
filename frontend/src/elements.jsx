@@ -1,4 +1,4 @@
-import tw, { styled } from 'twin.macro';
+import tw from 'twin.macro';
 
 // Buttons
 export const Button = tw.button`px-3 py-3 rounded text-sm font-poppins font-medium`;

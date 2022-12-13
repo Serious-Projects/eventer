@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import EventCard from '../components/EventCard';
 import UserCard from '../components/UserCard';
-import useAuthStore from '../context/AuthContext';
+// import useAuthStore from '../context/AuthContext';
+import { useAppContext, Actions } from '../context/AppContext';
 import { useEvents } from '../api/hooks';
 
 function HomePage() {
-   const authToken = useAuthStore((state) => state.token);
-   const { events, isError, isLoading } = useEvents(authToken);
+   const { state, trigger } = useAppContext();
+   const { events, isError, isLoading } = useEvents(state.sessionToken);
 
    if (isError) {
       if (isError.name === 'AxiosError' && isError.code === 'ERR_NETWORK') {
@@ -14,6 +15,10 @@ function HomePage() {
       }
       return <h4>{isError.response.data.message}</h4>;
    }
+   
+   useEffect(() => {
+      trigger({ type: Actions.LOAD_EVENTS, payload: events });
+   }, []);
 
    if (isLoading) return <p>Loading...</p>;
 

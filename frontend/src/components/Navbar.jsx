@@ -1,7 +1,10 @@
 import { NavLink } from 'react-router-dom';
 import { navigation } from '../data';
+import { useAppContext, Actions } from '../context/AppContext';
 
-function Navbar({ toggle }) {
+function Navbar() {
+   const { state, trigger } = useAppContext();
+   
    return (
       <nav className="py-3 px-4 border-b rounded-[0.7rem] shadow md:px-6 md:py-5">
          <div className="flex justify-between items-center">
@@ -12,7 +15,7 @@ function Navbar({ toggle }) {
             <button
                type="button"
                className="flex flex-col gap-y-1 border rounded p-2 md:hidden"
-               onClick={() => toggle(true)}
+               onClick={(e) => trigger({ type: Actions.TOGGLE_NAV })}
             >
                <span className="w-5 h-0.5 bg-gray-300 rounded"></span>
                <span className="w-5 h-0.5 bg-gray-300 rounded"></span>

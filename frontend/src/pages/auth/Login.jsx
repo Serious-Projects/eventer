@@ -1,19 +1,19 @@
 import { useLayoutEffect, useState, useEffect } from 'react';
-import { Link, useOutletContext, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useOutletContext, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import { Input } from '../../components';
 import { loginSchema } from '../../validation';
 import { login } from '../../api/fetcher';
-import useAuthStore from '../../context/AuthContext';
+// import useAuthStore from '../../context/AuthContext';
+import { useAppContext, Actions } from '../../context/AppContext';
 
 function LoginPage() {
    const setLayoutData = useOutletContext();
-   const { token, saveUser } = useAuthStore((state) => ({ token: state.token, saveUser: state.saveUser }));
+   const { state, trigger } = useAppContext();
    const navigate = useNavigate();
-   const [error, setError] = useState(null);
-
+   
    const { register, handleSubmit, formState: { errors } } = useForm({
       resolver: zodResolver(loginSchema),
    });
@@ -21,15 +21,11 @@ function LoginPage() {
    useLayoutEffect(() => {
       setLayoutData((prev) => ({ title: 'Login', icon: 'right-to-bracket' }));
    }, []);
-   
-   useEffect(() => {
-      if (!!token) return navigate('/');
-   }, []);
 
    const submitFormData = async (formData) => {
       try {
          const { data } = await login(formData);
-         saveUser(data.access_token);
+         trigger({ type: Actions.LOGIN, payload: data.access_token });
          navigate(-1);
       } catch (err) {
          if (err.name === 'AxiosError' && err.code === 'ERR_NETWORK') {
@@ -39,6 +35,9 @@ function LoginPage() {
          }
       }
    };
+   
+   // Redirection...
+   if (!state.sessionToken) return <Navigate to="/" />
 
    return (
       <form onSubmit={handleSubmit(submitFormData)}>

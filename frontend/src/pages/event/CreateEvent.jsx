@@ -24,8 +24,7 @@ function CreateEventPage() {
             endAt: moment(eventData.endAt).format(),
             deadline: moment(eventData.deadline).format(),
          };
-         console.log(_eventData);
-         const event = await createEvent(authToken, _eventData);
+         await createEvent(authToken, _eventData);
          navigate('/');
       } catch (err) {
          console.log(err);

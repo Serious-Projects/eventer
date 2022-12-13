@@ -2,7 +2,8 @@ import { useParams, Link } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { UserCard } from "../../components";
 import { useEvent } from "../../api/hooks";
-import useAuthStore from "../../context/AuthContext";
+// import useAuthStore from "../../context/AuthContext";
+import { useAppContext, Actions } from '../../context/AppContext';
 import { EventNotFound } from "../../components";
 import { useEventTracker } from '../../hooks';
 // import { events, participants } from "../../data";
@@ -18,9 +19,9 @@ function ParticipatedMessage() {
 
 function EventPage() {
    const { id } = useParams();
-   const authToken = useAuthStore((state) => state.token);
-   const { event, isLoading, isError } = useEvent(authToken, id);
-   const { participated, error } = useEventTracker(authToken, id);
+   const { state } = useAppContext();
+   const { event, isLoading, isError } = useEvent(state.sessionToken, id);
+   const { participated, error } = useEventTracker(state.sessionToken, id);
    
    if (isError) {
       console.log(isError);

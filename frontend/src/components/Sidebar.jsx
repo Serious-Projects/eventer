@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { navigation } from '../data';
+import { useAppContext, Actions } from '../context/AppContext';
 
-function Sidebar({ isOpen, setIsOpen }) {
+function Sidebar() {
+   const { state, trigger } = useAppContext();
+   
    return (
-      <aside className={`fixed top-14 left-0 w-64 min-h-screen bg-white-200 backdrop-blur ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition ease-in-out duration-500 z-50`}>
+      <aside className={`fixed top-14 left-0 w-64 min-h-screen bg-white-200 backdrop-blur ${state.isNavbarOpen ? 'translate-x-0' : '-translate-x-full'} transition ease-in-out duration-500 z-50`}>
          <button
             type="button"
             className="w-8 h-8 ml-auto mt-3 mr-3 flex justify-center items-center border border-black rounded"
-            onClick={(e) => setIsOpen(false)}
+            onClick={(e) => trigger({ type: Actions.TOGGLE_NAV })}
          >
             <i className="fa-solid fa-xmark text-xl"></i>
          </button>

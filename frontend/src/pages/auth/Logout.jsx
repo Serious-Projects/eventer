@@ -1,25 +1,25 @@
 import { useLayoutEffect, useState, useEffect } from 'react';
-import { Link, useOutletContext, useNavigate } from 'react-router-dom';
-import useAuthStore from '../../context/AuthContext';
+import { Navigate, useOutletContext, useNavigate } from 'react-router-dom';
+// import useAuthStore from '../../context/AuthContext';
 import { PrimaryButton, SecondaryButton } from '../../elements';
+import { useAppContext, Actions } from '../../context/AppContext';
 
 function Logout() {
+   const { state, trigger } = useAppContext();
    const setLayoutData = useOutletContext();
-   const { token, userLogout } = useAuthStore((state) => ({ token: state.token, userLogout: state.logoutUser }));
    const navigate = useNavigate();
    
    useLayoutEffect(() => {
       setLayoutData((prev) => ({ title: 'Logout', icon: 'right-from-bracket' }));
    }, []);
    
-   useEffect(() => {
-      if (!token) return navigate('/auth/login');
-   }, []);
-   
    const logout = (e) => {
-      userLogout();
+      trigger({ type: Actions.LOGOUT });
       navigate('/auth/login');
    };
+   
+   // Redirection...
+   if (!state.sessionToken) return <Navigate to="/auth/login" />
    
    return (
       <section>

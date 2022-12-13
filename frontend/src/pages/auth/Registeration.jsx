@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState, useEffect } from 'react';
-import { Link, useOutletContext, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useOutletContext, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
@@ -7,13 +7,14 @@ import { toast } from 'react-toastify';
 import { Input, ImagePicker } from '../../components';
 import { signupSchema } from '../../validation';
 import { createProfile } from '../../api/fetcher';
-import useAuthStore from '../../context/AuthContext';
+// import useAuthStore from '../../context/AuthContext';
+import { useAppContext, Actions } from '../../context/AppContext';
 
 function SignupPage() {
+   const { state, trigger } = useAppContext();
    const setLayoutData = useOutletContext();
    const [selectedFile, setSelectedFile] = useState(null);
    const navigate = useNavigate();
-   const { token, saveUser } = useAuthStore((state) => ({ token: state.token, saveUser: state.saveUser }));
 
    const { register, handleSubmit, formState: { errors } } = useForm({
       resolver: zodResolver(signupSchema),
@@ -25,7 +26,7 @@ function SignupPage() {
          // Create an account with the user data and profile picture
          const result = await createProfile({ profile: data, profilePicture: selectedFile });
          // Save the user auth data to the app state
-         saveUser(result.access_token);
+         trigger({ type: Actions.LOGIN, payload: result.access_token });
          // Finally redirect the user back to the home page
          navigate('/');
       } catch (err) {
@@ -43,10 +44,8 @@ function SignupPage() {
       setLayoutData((prev) => ({ title: 'Signup', icon: 'user-plus' }));
    }, []);
    
-   useEffect(() => {
-      // Check if the user is already logged-in, else redirect to the home page
-      if (!!token) return navigate('/');
-   }, []);
+   // Redirection...
+   if (!!token) return <Navigate to="/" />
 
    return (
       <form onSubmit={handleSubmit(submitFormData)}>

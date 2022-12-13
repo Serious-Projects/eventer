@@ -13,6 +13,7 @@ import {
    Signup,
    UserProfile,
 } from './pages';
+import AppContextProvider from './context/AppContext';
 import { AuthLayout, EventLayout } from './pages/layouts';
 import ProtectedRoute from './ProtectedRoute';
 import 'react-toastify/dist/ReactToastify.css';
@@ -22,8 +23,8 @@ function App() {
    const [isOpen, setIsOpen] = useState(false);
 
    return (
-      <>
-         <Navbar toggle={setIsOpen} />
+      <AppContextProvider>
+         <Navbar />
          <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
          <main className="px-4 py-2 md:px-8">
             <Routes>
@@ -57,7 +58,7 @@ function App() {
             pauseOnHover
             theme="colored"
          />
-      </>
+      </AppContextProvider>
    );
 }
 
